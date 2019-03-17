@@ -40,11 +40,13 @@ export default {
 
       // Get host
       let host = window.document.location.host.replace(/:.*/, '');
-      let url = window.document.location.protocol.replace("http:", "ws://") + host + ( window.document.location.port ? ':' + window.document.location.port : '')
-      console.log('url', url)
+      let urls = window.document.location.protocol.replace("https:", "wss:") + '//' + host + ( window.document.location.port ? ':' + window.document.location.port : '')
+      let url = window.document.location.protocol.replace("http:", "ws:") + '//' + host + ( window.document.location.port ? ':' + window.document.location.port : '')
+      let clientUrl = (window.document.location.protocol === 'http') ? urls : url
+      console.log('clientUrl', clientUrl)
 
       // Connect to server
-      this.client = new Colyseus.Client(url);
+      this.client = new Colyseus.Client(clientUrl);
 
       // Join Room & Set up
       this.room = this.client.join("chat");
