@@ -1,73 +1,67 @@
 <template>
-  <v-layout
-    column
-    justify-center
-    align-center
-  >
-    <v-flex
-      xs12
-      sm8
-      md6
-    >
-      <div class="text-xs-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">Welcome to the Vuetify + Nuxt.js template</v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>For more information on Vuetify, check out the <a
-            href="https://vuetifyjs.com"
-            target="_blank"
-          >documentation</a>.</p>
-          <p>If you have questions, please join the official <a
-            href="https://chat.vuetifyjs.com/"
-            target="_blank"
-            title="chat"
-          >discord</a>.</p>
-          <p>Find a bug? Report it on the github <a
-            href="https://github.com/vuetifyjs/vuetify/issues"
-            target="_blank"
-            title="contribute"
-          >issue board</a>.</p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-          >Nuxt Documentation</a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-          >Nuxt GitHub</a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            flat
-            nuxt
-            to="/inspire"
-          >Continue</v-btn>
-        </v-card-actions>
-      </v-card>
+  <v-layout row wrap justify-center align-center>
+    <v-flex xs12>
+      <v-btn @click="login">Login</v-btn>
+    </v-flex>
+    <!-- Login Button -->
+
+    <v-flex xs12>
+      <v-text-field v-model="message" />
+      <v-btn @click="add">Add Message</v-btn>
+    </v-flex>
+    <!-- Add Message -->
+
+    <v-flex xs12>
+      <p v-for="(message, index) in messages" :key="index">{{message}}</p>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import * as Colyseus from "colyseus.js"
 
 export default {
-  components: {
-    Logo,
-    VuetifyLogo
+
+  data() {
+    return {
+      message: '',
+      messages: [],
+      client: null,
+      room: null
+    }
+  },
+
+  methods: {
+    login() {
+      // this.$client()
+      // console.log('$colyseus', this.$colyseus())
+      // console.log('$init', this.$init(this.url))
+      // console.log('$client', this.$client())
+
+      // Get host
+      let host = window.document.location.host.replace(/:.*/, '');
+      let url = window.document.location.protocol.replace("http:", "ws://") + host + ( window.document.location.port ? ':' + window.document.location.port : '')
+      console.log('url', url)
+
+      // Connect to server
+      this.client = new Colyseus.Client(url);
+
+      // Join Room & Set up
+      this.room = this.client.join("chat");
+      this.room.onJoin.add(() => console.log("joined"))
+      this.room.onStateChange.addOnce((state) => console.log("initial room state:", state))
+      this.room.onStateChange.addOnce((state) => {
+        // new room state
+        // this signal is triggered on each patch
+      })
+      this.room.onMessage.add((message) => this.messages.push(message)) // listen to patches coming from the server
+    },
+
+    // send message to room on submit
+    add () {
+      this.room.send({ message: this.message });
+    }
   }
+
 }
 </script>

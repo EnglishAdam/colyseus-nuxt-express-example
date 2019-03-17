@@ -9,11 +9,18 @@ let client = null
 const ColyseusPlugin = {}
 ColyseusPlugin.install = function(Vue, options) {
   Vue.prototype.$colyseus = function(...args) {
+    console.log('$colyseus', ...args)
     return Colyseus
   }
 
-  Vue.prototype.$client = function(...args) {
+  Vue.prototype.$init = function(...args) {
+    console.log('$init', ...args)
     if (client == null) client = new Colyseus.Client(...args)
+    return client
+  }
+
+  Vue.prototype.$client = function(...args) {
+    console.log('$client', ...args)
     return client
   }
 }

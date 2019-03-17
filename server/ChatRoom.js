@@ -3,6 +3,7 @@ const Room = colyseus.Room
 
 class ChatRoom extends Room {
     constructor() {
+        super()
         // this room supports only 4 clients connected
         this.maxClients = 4;
     }

@@ -40,8 +40,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/vuetify',
-    '@/plugins/colyseus'
+    '@/plugins/vuetify'
+    // '@/plugins/colyseus'
   ],
 
   /*
@@ -55,7 +55,16 @@ module.exports = {
   ** Axios module configuration
   */
   axios: {
+    baseURL: process.env.BASE_URL
     // See https://github.com/nuxt-community/axios-module#options
+  },
+
+  /**
+   * Added env file
+   */
+  env: {
+    POST: process.env.POST,
+    BASE_URL: process.env.BASE_URL
   },
 
   /*

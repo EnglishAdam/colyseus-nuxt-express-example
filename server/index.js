@@ -37,12 +37,12 @@ async function start() {
   const gameServer = new colyseus.Server({
     server: http.createServer(app)
   });
-  
-  // Listen the game server
-  gameServer.listen(port);
 
   // Register chat room
   gameServer.register("chat", ChatRoom);
+  
+  // Listen the game server
+  gameServer.listen(port);
 
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
