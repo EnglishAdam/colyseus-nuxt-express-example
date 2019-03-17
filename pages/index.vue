@@ -42,7 +42,7 @@ export default {
       let host = window.document.location.host.replace(/:.*/, '');
       let urls = window.document.location.protocol.replace("https:", "wss:") + '//' + host + ( window.document.location.port ? ':' + window.document.location.port : '')
       let url = window.document.location.protocol.replace("http:", "ws:") + '//' + host + ( window.document.location.port ? ':' + window.document.location.port : '')
-      let clientUrl = (window.document.location.protocol === 'http') ? urls : url
+      let clientUrl = (window.document.location.protocol === 'https:') ? urls : url
       console.log('clientUrl', clientUrl)
 
       // Connect to server
