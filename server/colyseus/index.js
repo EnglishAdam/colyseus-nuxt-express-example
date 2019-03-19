@@ -4,6 +4,9 @@ const consola = require('consola')
 const http = require('http')
 const colyseus = require("colyseus");
 
+// Get utility functions
+const verifyClient = require('./verifyClient')
+
 // Rooms
 const rooms = require('./rooms/rooms')
 
@@ -28,7 +31,8 @@ module.exports = function createGameServer (app) {
    * })
    */
   const gameServer = new colyseus.Server({
-    server: http.createServer(app)
+    server: http.createServer(app),
+    verifyClient
   });
   
   // Register chat room

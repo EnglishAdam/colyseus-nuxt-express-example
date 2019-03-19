@@ -10,8 +10,27 @@ const consola = require('consola')
  * @returns {*}
  */
 module.exports = function verifyClient({origin, req, secure}, next) {
-  consola.info('verifyClient - origin', origin)
-  consola.info('verifyClient - req', req)
-  consola.info('verifyClient - secure', secure)
+  // Acceptable urls
+  const urls = [
+    'http://localhost:3000'
+  ]
+
+  // Set local url
+  const localOrigin = 'http://localhost:3000'
+  
+  // Get handshake url & serverToken
+  const url = new URL(origin + req.url);
+  const serverToken = url.searchParams.get('serverToken')
+
+  console.log('serverToken', url.searchParams.get('serverToken'))
+  console.log('process.env.SERVER_TOKEN', process.env.SERVER_TOKEN)
+
+  // If from local host need server token
+  if (origin === localOrigin && serverToken !== process.env.SERVER_TOKEN) next(false, 401, 'Unable to connect')
+
+  // If from web needs to come from accepted origin
+  if (!urls.includes(origin)) next(false, 401, 'Unable to connect')
+
+  // Accept handshake
   return next(true, 200, 'Message')
 }
