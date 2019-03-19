@@ -4,11 +4,11 @@ const { Nuxt, Builder } = require('nuxt')
 const app = express()
 
 // Colyseus
-const http = require('http')
-const colyseus = require("colyseus");
+// const http = require('http')
+const gameServer = require("./colyseus/index")(app);
 
 // Rooms
-const ChatRoom = require('./ChatRoom')
+// const ChatRoom = require('./ChatRoom')
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')
@@ -30,17 +30,7 @@ async function start() {
 
   // Give nuxt middleware to express
   app.use(nuxt.render)
-
-  // Listen the server
-  // app.listen(port, host)
-
-  const gameServer = new colyseus.Server({
-    server: http.createServer(app)
-  });
-
-  // Register chat room
-  gameServer.register("chat", ChatRoom);
-  
+ 
   // Listen the game server
   gameServer.listen(port);
 
