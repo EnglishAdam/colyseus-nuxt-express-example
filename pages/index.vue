@@ -45,8 +45,10 @@ export default {
       let clientUrl = (window.document.location.protocol === 'https:') ? urls : url
       console.log('clientUrl', clientUrl)
 
+      console.log('Colyseus.Client', Colyseus.Client)
+
       // Connect to server
-      this.client = new Colyseus.Client(clientUrl);
+      this.client = new Colyseus.Client(clientUrl, { serverToken: 'thisIsTheServerToken' });
 
       // Join Room & Set up
       this.room = this.client.join("chat");
