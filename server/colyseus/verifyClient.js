@@ -12,7 +12,8 @@ const consola = require('consola')
 module.exports = function verifyClient({origin, req, secure}, next) {
   // Acceptable urls
   const urls = [
-    'http://localhost:3000'
+    'http://colyseus-nuxt-express.herokuapp.com/',
+    'https://colyseus-nuxt-express.herokuapp.com/'
   ]
 
   // Set local url
@@ -22,6 +23,7 @@ module.exports = function verifyClient({origin, req, secure}, next) {
   const url = new URL(origin + req.url);
   const serverToken = url.searchParams.get('serverToken')
 
+  console.log('origin', origin)
   console.log('serverToken', url.searchParams.get('serverToken'))
   console.log('process.env.SERVER_TOKEN', process.env.SERVER_TOKEN)
 
