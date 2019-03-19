@@ -1,5 +1,6 @@
 const pkg = require('./package')
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
+require('dotenv').config()
 
 module.exports = {
   mode: 'spa',
@@ -64,7 +65,8 @@ module.exports = {
    */
   env: {
     POST: process.env.POST,
-    BASE_URL: process.env.BASE_URL
+    BASE_URL: process.env.BASE_URL,
+    SERVER_TOKEN: process.env.SERVER_TOKEN
   },
 
   /*
