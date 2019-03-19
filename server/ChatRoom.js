@@ -1,4 +1,5 @@
 const colyseus = require('colyseus')
+const consola = require('consola')
 const Room = colyseus.Room
 
 class ChatRoom extends Room {
@@ -9,7 +10,7 @@ class ChatRoom extends Room {
     }
 
     onInit (options) {
-        console.log("BasicRoom created!", options);
+        consola.log("BasicRoom created!", options);
     }
 
     onJoin (client) {
@@ -21,12 +22,12 @@ class ChatRoom extends Room {
     }
 
     onMessage (client, data) {
-        console.log("BasicRoom received message from", client.sessionId, ":", data);
+        consola.log("BasicRoom received message from", client.sessionId, ":", data);
         this.broadcast(`(${ client.sessionId }) ${ data.message }`);
     }
 
     onDispose () {
-        console.log("Dispose BasicRoom");
+        consola.log("Dispose BasicRoom");
     }
 
 }
