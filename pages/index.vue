@@ -4,6 +4,18 @@
       <v-btn @click="login">Login</v-btn>
     </v-flex>
     <!-- Login Button -->
+    
+    <v-flex v-if="client" xs12>
+      <v-btn @click="getAvailableRooms">Get Available Rooms</v-btn>
+      <p>Available Rooms:</p>
+      <p>{{availableRooms}}</p>
+    </v-flex>
+    <!-- Login Button -->
+    
+    <v-flex v-if="client" xs12>
+      <v-btn @click="join('chat')">join chat}</v-btn>
+    </v-flex>
+    <!-- Login Button -->
 
     <v-flex xs12>
       <v-text-field v-model="message" />
@@ -35,11 +47,20 @@ export default {
       messages: [],
       client: null,
       room: null,
-      SERVER_TOKEN: null
+      SERVER_TOKEN: null,
+      name: 'Unknown', // Your connection name
+      availableRooms: []
     }
   },
 
   methods: {
+    getAvailableRooms() {
+      this.client.getAvailableRooms('chat', (rooms, err) => {
+        if (err) return
+        this.availableRooms = rooms
+      })
+    },
+
     login() {
       // this.$client()
       // console.log('$colyseus', this.$colyseus())
@@ -58,10 +79,11 @@ export default {
       // Connect to server
       // console.log('client this.SERVER_TOKEN', this.SERVER_TOKEN)
       this.client = new Colyseus.Client(clientUrl, { serverToken: this.SERVER_TOKEN })
-      this.client = new Colyseus.Client(clientUrl)
+    },
 
+    join (roomName) {
       // Join Room & Set up
-      this.room = this.client.join("chat")
+      this.room = this.client.join(roomName, { name: this.name })
       this.room.onJoin.add(() => console.log("joined"))
       this.room.onStateChange.addOnce((state) => console.log("initial room state:", state))
       this.room.onStateChange.addOnce((state) => {
