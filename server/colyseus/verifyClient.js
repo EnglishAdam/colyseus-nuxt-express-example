@@ -24,14 +24,14 @@ module.exports = function verifyClient({origin, req, secure}, next) {
   const serverToken = url.searchParams.get('serverToken')
 
   console.log('origin', origin)
-  console.log('serverToken', url.searchParams.get('serverToken'))
+  console.log('serverToken', serverToken)
   console.log('process.env.SERVER_TOKEN', process.env.SERVER_TOKEN)
 
   // If from local host need server token
-  if (origin === localOrigin && serverToken !== process.env.SERVER_TOKEN) next(false, 401, 'Unable to connect')
+  if (origin === localOrigin && serverToken !== process.env.SERVER_TOKEN) return next(false, 401, 'Unable to connect')
 
   // If from web needs to come from accepted origin
-  if (!urls.includes(origin)) next(false, 401, 'Unable to connect')
+  if (!urls.includes(origin)) return next(false, 401, 'Unable to connect')
 
   // Accept handshake
   return next(true, 200, 'Message')
