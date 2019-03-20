@@ -25,6 +25,7 @@ module.exports = function verifyClient({origin, req, secure}, next) {
   // Get handshake url & serverToken
   const url = new URL(origin + req.url);
   const serverToken = url.searchParams.get('serverToken')
+  console.log('serverToken', serverToken)
 
   // If from local host need server token
   if (origin === localOrigin) {
