@@ -22,12 +22,20 @@ import * as Colyseus from "colyseus.js"
 
 export default {
 
+  asyncData({env}) {
+    console.log('asyncData', env)
+    return {
+      SERVER_TOKEN: env.SERVER_TOKEN
+    }
+  },
+
   data() {
     return {
       message: '',
       messages: [],
       client: null,
-      room: null
+      room: null,
+      SERVER_TOKEN: null
     }
   },
 
@@ -39,19 +47,21 @@ export default {
       // console.log('$client', this.$client())
 
       // Get host
-      let host = window.document.location.host.replace(/:.*/, '');
+      let host = window.document.location.host.replace(/:.*/, '')
       let urls = window.document.location.protocol.replace("https:", "wss:") + '//' + host + ( window.document.location.port ? ':' + window.document.location.port : '')
       let url = window.document.location.protocol.replace("http:", "ws:") + '//' + host + ( window.document.location.port ? ':' + window.document.location.port : '')
       let clientUrl = (window.document.location.protocol === 'https:') ? urls : url
-      console.log('clientUrl', clientUrl)
+      // console.log('clientUrl', clientUrl)
 
-      console.log('Colyseus.Client', Colyseus.Client)
+      // console.log('Colyseus.Client', Colyseus.Client)
 
       // Connect to server
-      this.client = new Colyseus.Client(clientUrl, { serverToken: 'thisIsTheServerToken' });
+      // console.log('client this.SERVER_TOKEN', this.SERVER_TOKEN)
+      this.client = new Colyseus.Client(clientUrl, { serverToken: this.SERVER_TOKEN })
+      this.client = new Colyseus.Client(clientUrl)
 
       // Join Room & Set up
-      this.room = this.client.join("chat");
+      this.room = this.client.join("chat")
       this.room.onJoin.add(() => console.log("joined"))
       this.room.onStateChange.addOnce((state) => console.log("initial room state:", state))
       this.room.onStateChange.addOnce((state) => {
@@ -63,7 +73,7 @@ export default {
 
     // send message to room on submit
     add () {
-      this.room.send({ message: this.message });
+      this.room.send({ message: this.message })
     }
   }
 

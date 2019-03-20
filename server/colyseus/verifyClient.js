@@ -1,4 +1,7 @@
 const consola = require('consola')
+
+const isServerTokenWorking = false
+
 /**
  * Verification function to verify clients
  * 
@@ -23,16 +26,15 @@ module.exports = function verifyClient({origin, req, secure}, next) {
   const url = new URL(origin + req.url);
   const serverToken = url.searchParams.get('serverToken')
 
-  console.log('origin', origin)
-  console.log('serverToken', serverToken)
-  console.log('process.env.SERVER_TOKEN', process.env.SERVER_TOKEN)
-
   // If from local host need server token
-  if (origin === localOrigin && serverToken !== process.env.SERVER_TOKEN) return next(false, 401, 'Unable to connect')
+  if (origin === localOrigin) {
+    if (!isServerTokenWorking) return next(true)
+    else if (serverToken !== process.env.SERVER_TOKEN) return next(false, 401, 'Unable to connect')
+  }
 
   // If from web needs to come from accepted origin
-  if (!urls.includes(origin)) return next(false, 401, 'Unable to connect')
+  if (origin !== localOrigin && !urls.includes(origin)) return next(false, 401, 'Unable to connect')
 
   // Accept handshake
-  return next(true, 200, 'Message')
+  return next(true)
 }
