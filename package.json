@@ -1,6 +1,6 @@
 {
   "name": "colyseus-nuxt-express-example",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "Example demonstrating integrating nuxt, express and colyseus multiplayer server.",
   "author": "Adam English",
   "private": true,
