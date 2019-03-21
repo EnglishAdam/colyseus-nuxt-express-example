@@ -1,6 +1,6 @@
 const consola = require('consola')
 
-const isServerTokenWorking = false
+const isServerTokenWorking = true
 
 /**
  * Verification function to verify clients
@@ -26,6 +26,7 @@ module.exports = function verifyClient({origin, req, secure}, next) {
   const url = new URL(origin + req.url);
   const serverToken = url.searchParams.get('serverToken')
   console.log('serverToken', serverToken)
+  console.log('process.env.SERVER_TOKEN', process.env.SERVER_TOKEN)
 
   // If from local host need server token
   if (origin === localOrigin) {
